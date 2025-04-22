@@ -1,0 +1,46 @@
+const teachers = [
+    { name: "Jan Novák", subject: "Matematika" },
+    { name: "Marie Černá", subject: "Český jazyk" },
+    { name: "Petr Svoboda", subject: "Fyzika" }
+];
+
+const teacherList = document.getElementById("teacher-list");
+const modal = document.getElementById("modal");
+const teacherName = document.getElementById("teacher-name");
+const ratingInput = document.getElementById("rating");
+const commentInput = document.getElementById("comment");
+const submitBtn = document.getElementById("submit-review");
+const closeBtn = document.getElementById("close-btn");
+
+let currentTeacher = null;
+
+teachers.forEach((teacher, index) => {
+    const card = document.createElement("div");
+    card.className = "teacher-card";
+    card.innerHTML = `<h3>${teacher.name}</h3><p>${teacher.subject}</p>`;
+    card.onclick = () => {
+        currentTeacher = teacher;
+        teacherName.textContent = teacher.name;
+        ratingInput.value = "";
+        commentInput.value = "";
+        modal.classList.remove("hidden");
+    };
+    teacherList.appendChild(card);
+});
+
+submitBtn.onclick = () => {
+    const rating = ratingInput.value;
+    const comment = commentInput.value;
+    if (rating && comment && currentTeacher) {
+        const review = { rating, comment };
+        localStorage.setItem(currentTeacher.name, JSON.stringify(review));
+        alert("Hodnocení uloženo!");
+        modal.classList.add("hidden");
+    } else {
+        alert("Vyplňte prosím všechna pole.");
+    }
+};
+
+closeBtn.onclick = () => {
+    modal.classList.add("hidden");
+};
